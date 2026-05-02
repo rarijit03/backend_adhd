@@ -1,0 +1,15 @@
+# backend/requirements.txt
+fastapi==0.111.0
+uvicorn[standard]==0.30.1
+supabase==2.4.6
+scikit-learn==1.5.0
+numpy==1.26.4
+pydantic[email]==2.7.1
+python-multipart==0.0.9
+
+# ─────────────────────────────────────────────
+# backend/.env.example  (rename to .env)
+# ─────────────────────────────────────────────
+# SUPABASE_URL=https://your-project.supabase.co
+# SUPABASE_KEY=your-service-role-key
+# JWT_SECRET=replace-with-long-random-string
