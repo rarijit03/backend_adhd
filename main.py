@@ -48,7 +48,8 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:3000",
-        "https://frontend-adhd-git-main-rarijit03s-projects.vercel.app"
+        "https://frontend-adhd-git-main-rarijit03s-projects.vercel.app",
+        "https://frontend-adhd-di72sw4xo-rarijit03s-projects.vercel.app",
     ],
     allow_credentials=True,
     allow_methods=["*"],
