@@ -18,7 +18,7 @@ Run with:
 import os
 from dotenv import load_dotenv
 from pathlib import Path
-load_dotenv(dotenv_path=r"C:\Users\rarij\backend\.env")
+load_dotenv()
 
 from fastapi import FastAPI, HTTPException, Depends, status
 from fastapi.middleware.cors import CORSMiddleware
@@ -35,18 +35,21 @@ from supabase import create_client, Client
 from ml_model import ADHDModel
 
 # ── Config ────────────────────────────────────────────────────
-SUPABASE_URL       = "https://tbdasqfqneuavrvbgmnz.supabase.co"
-SUPABASE_KEY       = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRiZGFzcWZxbmV1YXZydmJnbW56Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3Mzk4ODM3NSwiZXhwIjoyMDg5NTY0Mzc1fQ.Pj4L5hQG06keEW6wb-Ry-u65XID-cJhggXKa_brzKDA"
-JWT_SECRET         = "neurascan-super-secret-key-2024"
-GMAIL_ADDRESS      = "scan.neura@gmail.com"
-GMAIL_APP_PASSWORD = "whgnwngkmihcigib"
+SUPABASE_URL       = os.getenv("SUPABASE_URL")
+SUPABASE_KEY       = os.getenv("SUPABASE_KEY")
+JWT_SECRET         = os.getenv("JWT_SECRET_KEY")
+GMAIL_ADDRESS      = os.getenv("GMAIL_ADDRESS")
+GMAIL_APP_PASSWORD = os.getenv("GMAIL_APP_PASSWORD")
 
 # ── App ───────────────────────────────────────────────────────
 app = FastAPI(title="NeuraScan API", version="2.0.0")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=[
+        "http://localhost:3000",
+        "https://frontend-adhd.vercel.app",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
