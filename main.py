@@ -247,7 +247,7 @@ def welcome_email_html(full_name: str) -> str:
           </table>
           <table width="100%" cellpadding="0" cellspacing="0">
             <tr><td align="center">
-              <a href="http://localhost:3000" style="display:inline-block;background:linear-gradient(135deg,#8b5cf6,#06b6d4);color:#fff;text-decoration:none;padding:14px 36px;border-radius:12px;font-size:15px;font-weight:700">Start Your Assessment →</a>
+              <a href="https://frontend-adhd-rarijit03s-projects.vercel.app" style="display:inline-block;background:linear-gradient(135deg,#8b5cf6,#06b6d4);color:#fff;text-decoration:none;padding:14px 36px;border-radius:12px;font-size:15px;font-weight:700">Start Your Assessment →</a>
             </td></tr>
           </table>
         </td></tr>
