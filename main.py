@@ -27,9 +27,9 @@ from pydantic import BaseModel, EmailStr
 from typing import List, Optional
 import numpy as np
 import uuid, hashlib, hmac, base64, json, time, random
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
+# import smtplib
+# from email.mime.text import MIMEText
+# from email.mime.multipart import MIMEMultipart
 from datetime import datetime, timedelta
 from supabase import create_client, Client
 from ml_model import ADHDModel
@@ -118,17 +118,45 @@ def hash_password(pw: str) -> str:
 def mask_id(user_id: str) -> str:
     return f"USR-{user_id[:8].upper()}***"
 
+
 # ── Email sender ──────────────────────────────────────────────
+
+import urllib.request
+
 def send_email(to_email: str, subject: str, html_body: str):
-    """Send HTML email via Gmail SMTP."""
-    msg = MIMEMultipart("alternative")
-    msg["Subject"] = subject
-    msg["From"]    = f"NeuraScan <{GMAIL_ADDRESS}>"
-    msg["To"]      = to_email
-    msg.attach(MIMEText(html_body, "html"))
-    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
-        server.login(GMAIL_ADDRESS, GMAIL_APP_PASSWORD)
-        server.sendmail(GMAIL_ADDRESS, to_email, msg.as_string())
+    RESEND_API_KEY = os.getenv("RESEND_API_KEY")
+    data = json.dumps({
+        "from": "NeuraScan <onboarding@resend.dev>",
+        "to": [to_email],
+        "subject": subject,
+        "html": html_body,
+    }).encode()
+    req = urllib.request.Request(
+        "https://api.resend.com/emails",
+        data=data,
+        headers={
+            "Authorization": f"Bearer {RESEND_API_KEY}",
+            "Content-Type": "application/json",
+        },
+        method="POST"
+    )
+    with urllib.request.urlopen(req) as r:
+        return json.loads(r.read())
+      
+# Render Free tier blocked port 465
+# ---------------------------------------
+# def send_email(to_email: str, subject: str, html_body: str):
+#     """Send HTML email via Gmail SMTP."""
+#     msg = MIMEMultipart("alternative")
+#     msg["Subject"] = subject
+#     msg["From"]    = f"NeuraScan <{GMAIL_ADDRESS}>"
+#     msg["To"]      = to_email
+#     msg.attach(MIMEText(html_body, "html"))
+#     with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+#         server.login(GMAIL_ADDRESS, GMAIL_APP_PASSWORD)
+#         server.sendmail(GMAIL_ADDRESS, to_email, msg.as_string())
+
+
 
 # def welcome_email_html(full_name: str) -> str:
 #     return f"""
@@ -512,5 +540,9 @@ def get_assessment(assessment_id: str, user_id: str = Depends(get_current_user))
     return result.data[0]
 
 @app.get("/health")
+#---------uptime robot uses HEAD ----------
+@app.head("/health")
 def health():
     return {"status": "ok", "version": "2.0.0", "model": model.model_type}
+
+
