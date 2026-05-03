@@ -124,18 +124,18 @@ def mask_id(user_id: str) -> str:
 import urllib.request
 
 def send_email(to_email: str, subject: str, html_body: str):
-    RESEND_API_KEY = os.getenv("RESEND_API_KEY")
+    BREVO_API_KEY = os.getenv("BREVO_API_KEY")
     data = json.dumps({
-        "from": "NeuraScan <onboarding@resend.dev>",
-        "to": [to_email],
+        "sender": {"name": "NeuraScan", "email": "scan.neura@gmail.com"},
+        "to": [{"email": to_email}],
         "subject": subject,
-        "html": html_body,
+        "htmlContent": html_body,
     }).encode()
     req = urllib.request.Request(
-        "https://api.resend.com/emails",
+        "https://api.brevo.com/v3/smtp/email",
         data=data,
         headers={
-            "Authorization": f"Bearer {RESEND_API_KEY}",
+            "api-key": BREVO_API_KEY,
             "Content-Type": "application/json",
         },
         method="POST"
